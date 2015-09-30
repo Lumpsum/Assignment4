@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Assignment 4</title>
+		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	</head>
+
+	<body onLoad = "formLoad()">
+		<div class="container-fluid">
+			<div class="row" style="background-color:#540C44; color:#FFF;">
+				<div class='col-lg-12'>
+					<h3><p class="text-center"><strong>Asian Dishes</strong></p></h3>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class='col-lg-12'>
+					<img src ="https://www.sixflags.com/sites/default/files/styles/subpage_banner/public/mn_Dining_AsianCuisine.jpg?itok=M26r2d57" class="img-responsive" style="width:100%;">
+				</div>
+			</div>
+		<div>
+		<div class = "container">
+
+			<div class='row'>
+				<div class="col-lg-12">
+					<h1>Asian Dishes</h1>
+					<h3>About</h3>
+					<p>Asian Dishes is a site about dishes that are available that range from vegetarian to illegal dishes. While using the application you can search for ingredients and the corresponding dishes so you can have a rough outline
+						what the dish contains. With this you can make your own dishes and search for new dishes. Next to that you can also select a ingredient and find all the dishes that contain that ingredient. Have Fun!</p>
+					</div>
+				</div>
+
+			<div class='row' style="background-color:#F7F7F7; padding:5px;">
+				<div class='col-lg-6'>
+					<h3>Example Querying</h3>
+					<p>Just a simple example of the querying to showcase the difference interferencing makes on this ontology.</p>
+					<pre id='query1' class='sparql' style='width: 100%; background-color:#FFF;' rows='10'>
+PREFIX food: &lt;http://www.semanticweb.org/rick/food#&gt;
+
+SELECT ?x WHERE {
+  ?x a food:NonVegetarianDish .
+}
+					</pre>
+				</div>
+				<div class='col-lg-3'>
+					<h3>Output Left Button</h3>
+					<div id="linktarget1" style='height: 15em; scroll: both; overflow: auto;'>This is where the server response will appear.</div>
+				</div>
+				<div class='col-lg-3'>
+					<h3>Output Right Button</h3>
+					<div id="linktarget2" style='height: 15em; scroll: both; overflow: auto;'>This is where the server response will appear.</div>
+				</div>
+			</div>
+			<div class="row" style="background-color:#F7F7F7; padding:5px;">
+				<div class="col-lg-12">
+					<p>Here you can decide which results you want, the left one is with interferencing and the right one is without.</p>
+					<div class="col-lg-2"><a id="link1" class='btn btn-primary'>With Interferencing</a></div><div class="col-lg-2"><a id="link2" class='btn btn-primary'>Without Interferencing</a></div>
+				</div>
+				<div class="col-lg-12">
+					<h3>Explanation of the results</h3>
+					<p>As you can see the button with inferencing give you results and the right one does not, even though they use the same query, which is due inferencing. Inferencing looks inside your relationships and tries to make some relationship that you did not define yet but are present because of the restrictions etc. you gave to a class or property. In this example, the dishes are all classified as dishes but are not placed yet under vegetarian or non vegetarian for example. In other words, the left box displays the relationships he could make through my restrictions and the right one does not show anything because he did not make those relationship because the inferencing is disabled.
+					</p>
+				</div>
+			</div>
+			<div class = "row">
+				<div class="col-lg-6">
+					<h3>Pick an ingredient!</h3>
+					<p>Here you can pick an ingredient on the list, click on the button and then you see all the dishes that contain that ingredient, so you can get some inspiration. If a dish is illegal in the western world, it will tell you as well so you know what you can and can't make.</p>
+				<pre id='query3' class='sparql' style='width: 100%; display:none;' rows='10'>
+PREFIX food: &lt;http://www.semanticweb.org/rick/food#&gt;
+
+SELECT DISTINCT ?x 
+WHERE {
+  ?x a food:Ingredient
+       }
+					</pre>
+					<h3>Ingredients</h3>
+					<form name = "myform" role = "form">
+				<div class="form-group" id="linktarget3"></div>
+				<input type = "button" class = "btn btn-primary" value = "Pick Ingredient" onClick="pickIngredient(this.form)"/>
+			</form>
+		</div>
+		<div class='col-lg-6'>
+					<h3>Output</h3>
+					<div id="linktarget4" style='height: 15em; scroll: both; overflow: auto;'>This is where the server response will appear.</div>
+				</div>
+
+		</div>
+		<div class = "row" style="background-color:#F7F7F7; padding:5px;">
+				<div class="col-lg-6">
+					<h3>Pick a dish!</h3>
+					<p>Here you can pick a dish out of all the available dishes in the database. When you have chosen your dish you can click the button and all the ingredients will pop up on the right side!</p>
+				<pre id='query5' class='sparql' style='width: 100%; display:none;' rows='10'>
+PREFIX food: &lt;http://www.semanticweb.org/rick/food#&gt;
+
+SELECT DISTINCT ?x 
+WHERE {
+  ?x a food:AsianDish
+       }
+					</pre>
+					<h3>Dishes</h3>
+					<form name = "myform" role = "form">
+				<div class="form-group" id="linktarget5"></div>
+				<input type = "button" class = "btn btn-primary" value = "Pick Dish" onClick="pickDish(this.form)"/>
+			</form>
+		</div>
+		<div class='col-lg-6'>
+					<h3>Output</h3>
+					<div id="linktarget6" style='height: 15em; scroll: both; overflow: auto;'>This is where the server response will appear.</div>
+				</div>
+
+		</div>
+	</div>
+
+		<script src='{{ url_for("static", filename="js/jquery-1.11.0.min.js") }}' type='text/javascript'></script>
+		<script src='{{ url_for("static", filename="js/scripts.js") }}' type='text/javascript'></script>
+
+
+	</body>
+</head>
